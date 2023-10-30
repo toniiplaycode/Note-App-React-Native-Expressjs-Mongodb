@@ -37,9 +37,9 @@ export const signupUser = async (req, res) => {
 export const signinUser = async(req, res) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email, password });
+    const user = await User.findOne({ email });
 
-    if(user) {
+    if(user && (await user.matchPassword(password))) {
         res.status(200).json({
             _id: user._id,
             name: user.name,
@@ -47,6 +47,6 @@ export const signinUser = async(req, res) => {
         });
     } else {
         res.status(400);
-        throw new Error("Invalid emial or password!");
+        throw new Error("Invalid email or password!");
     }
 }

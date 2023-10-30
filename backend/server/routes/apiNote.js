@@ -5,10 +5,10 @@ const router = express.Router();
 
 const initNoteRoutes = (app) => {
     router.post("/createNote", createNote);
-    router.post("/editNote", editNote);
-    router.post("/deleteNote", deleteNote);
+    router.put("/editNote", editNote);
+    router.put("/deleteNote", deleteNote);
 
     return app.use("/", router);
 }
 
-export default initNoteRoutes
+export default initNoteRoutes;

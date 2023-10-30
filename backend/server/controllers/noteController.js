@@ -59,6 +59,7 @@ export const deleteNote = async(req, res) => {
         }    
 
         const note = await Note.findOneAndDelete({_id: noteId});
+        
         if(note) {
             res.status(200).json({ message: "delete successed !" })
         } else {
