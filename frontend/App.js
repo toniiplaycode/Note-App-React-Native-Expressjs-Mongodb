@@ -13,10 +13,11 @@ const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
       <Stack.Navigator>
+
         <Stack.Screen
           name="Home"
           component={(props) => (
-            <Home {...props} showSort={showSort} setShowSort={setShowSort} />
+            <Home {...props} showSort={showSort} setShowSort={setShowSort}/>
           )}
           options={() => ({
             headerTitle: "NOTE APP",
@@ -43,6 +44,7 @@ const Stack = createNativeStackNavigator();
             ),
           })}
         />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
