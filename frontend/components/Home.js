@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-const Home = ({showSort, setShowSort}) => {
+const Home = ({showSort, setShowSort, data, fetchData}) => {
 
     const [search, setSearch] = useState();
 
     return (
-        <View style={{alignItems: 'center'}}>
+        <View>
             <Modal
                 visible={showSort}
                 transparent
@@ -41,6 +41,19 @@ const Home = ({showSort, setShowSort}) => {
                 />
             </View>
             
+            <ScrollView>
+                <View style={styles.note_container}>
+                {
+                    data.map((i, index) => (
+                        <View style={styles.note_item} key={index}>
+                            <Text style={styles.note_date}>{i.createdAt.slice(0, 10).split('-').reverse().join('-')}</Text>
+                            <Text style={styles.note_title}>{i.title}</Text>
+                            <Text style={styles.note_content}>{i.content}</Text>
+                        </View>
+                    ))
+                }
+                </View>
+            </ScrollView> 
         </View>
     );
 }
@@ -87,6 +100,30 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         alignItems: "center",
         // backgroundColor: "#fff"
+    },
+    note_container: {
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        paddingLeft: 14,
+        paddingRight: 14,
+    },
+    note_item: {
+        flexBasis: "48%",
+        backgroundColor: "#f7df7c",
+        color: "#000000",
+        borderRadius: 5,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        marginBottom: 10
+    },
+    note_date: {
+        textAlign: "right"
+    },
+    note_title: {
+        fontWeight: "bold",
+        fontSize: 20,
     }
   });
    

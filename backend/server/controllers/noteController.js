@@ -1,5 +1,24 @@
 import Note from "../models/Note.js"
 
+export const fetchNote = async(req, res) => {
+    const { userId } = req.body;
+
+    if(!userId) {
+        res.status(400);
+        throw new Error("user empty !");
+        return;
+    }
+
+    try{
+        const note = await Note.find({user: userId});
+
+        if(note) res.status(200).json(note);
+    } catch(error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
+}
+
 export const createNote = async(req, res) => {
     const { title, content, userId } = req.body;
 
