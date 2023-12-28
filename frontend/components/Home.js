@@ -1,12 +1,67 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import AddNote from "./AddNote";
+import axios from "axios";
 
-const Home = ({showSort, setShowSort, data, fetchData}) => {
+const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
 
     const [search, setSearch] = useState();
+    const [sortedData, setSortedData] = useState([]);
+
+    useEffect(() => {
+        const sorted = data.slice().sort((a, b) => {
+            const dateA = new Date(a.createdAt);
+            const dateB = new Date(b.createdAt);
+            if(sort) return dateB - dateA;
+            else return dateA - dateB;
+        });
+
+        setSortedData(sorted);
+    }, [data]);
+
+    useEffect(() => {
+        // Sắp xếp và lọc data dựa trên giá trị search và thứ tự sắp xếp
+        const sortedAndFilteredData = data
+            .filter((item) => {
+                // Lọc dữ liệu dựa trên giá trị search
+                if (!search || 
+                    item.title.toLowerCase().includes(search.toLowerCase()) ||
+                    item.content.toLowerCase().includes(search.toLowerCase())
+                ) {
+                    return true;
+                }
+                return false;
+            })
+            .sort((a, b) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                if(sort) return dateB - dateA;
+                else return dateA - dateB;
+            });
+    
+        setSortedData(sortedAndFilteredData);
+    }, [data, search, sort]);
+
+    const onAddNote = async (newNote) => {
+        // phải dùng IPv4 chứ dùng localhost là lỗi liền
+        try {
+            await axios.post("http://192.168.1.12:8085/createNote/", 
+                newNote,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                },
+            );
+        } catch (error) {
+            console.error("Error create data:", error);
+        }
+
+        fetchData();
+    }
 
     return (
-        <View>
+        <View style={{position: "relative"}}>
             <Modal
                 visible={showSort}
                 transparent
@@ -15,14 +70,20 @@ const Home = ({showSort, setShowSort, data, fetchData}) => {
                 <View style={styles.modal_container}>
                 <View style={styles.modal_box}>
                     <TouchableOpacity
-                        onPress={() => {setShowSort(!showSort)}}
+                        onPress={() => {
+                            setShowSort(!showSort)
+                            setSort(false)
+                        }}
                     >
                         <Text style={styles.textSort}>
                             Ascending 
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => {setShowSort(!showSort)}}
+                        onPress={() => {
+                            setShowSort(!showSort)
+                            setSort(true)
+                        }}
                     >
                         <Text style={styles.textSort}>
                             Descending
@@ -44,16 +105,20 @@ const Home = ({showSort, setShowSort, data, fetchData}) => {
             <ScrollView>
                 <View style={styles.note_container}>
                 {
-                    data.map((i, index) => (
-                        <View style={styles.note_item} key={index}>
+                    sortedData.map((i, index) => (
+                        <TouchableOpacity style={styles.note_item} key={index}
+                            onPress={() => {}}
+                        >
                             <Text style={styles.note_date}>{i.createdAt.slice(0, 10).split('-').reverse().join('-')}</Text>
                             <Text style={styles.note_title}>{i.title}</Text>
                             <Text style={styles.note_content}>{i.content}</Text>
-                        </View>
+                        </TouchableOpacity>
                     ))
                 }
                 </View>
             </ScrollView> 
+
+            <AddNote onAddNote={onAddNote} />
         </View>
     );
 }
@@ -108,6 +173,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingLeft: 14,
         paddingRight: 14,
+        marginBottom: 100
     },
     note_item: {
         flexBasis: "48%",

@@ -9,13 +9,13 @@ const Stack = createNativeStackNavigator();
 
  const App = () => {
   const [showSort, setShowSort] = useState(false)
-  const [sort, setSort] = useState(true); // true: ASC, false: DES
+  const [sort, setSort] = useState(true); // true: DES, false: ASC
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    // phải dùng IP chứ dùng localhost là lỗi liền
+    // phải dùng IPv4 chứ dùng localhost là lỗi liền
     try {
-      const response = await axios.post("http://192.168.10.247:8085/fetchNote/", 
+      const response = await axios.post("http://192.168.1.12:8085/fetchNote/", 
         {
           userId: "653e290a6e6f2bfba80dca51",
         },
@@ -43,7 +43,7 @@ const Stack = createNativeStackNavigator();
         <Stack.Screen
           name="Home"
           component={(props) => (
-            <Home {...props} showSort={showSort} setShowSort={setShowSort} data={data} fetchData={fetchData}/>
+            <Home {...props} showSort={showSort} setShowSort={setShowSort} sort={sort} setSort={setSort} data={data} fetchData={fetchData}/>
           )}
           options={() => ({
             headerTitle: "NOTE APP",
