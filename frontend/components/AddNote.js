@@ -102,16 +102,17 @@ const styles = StyleSheet.create({
   buttonClose: {
     width: 30,
     height: 30,
-    backgroundColor: "#123",
+    backgroundColor: "#b3cccc",
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 10,
+    marginTop: -12,
     position: "relative",
     left: "90%"
   },
   buttonCloseX: {
-    color: "#f0f0f0",
+    color: "#111",
     fontSize: 20,
     fontWeight: "bold"
   }

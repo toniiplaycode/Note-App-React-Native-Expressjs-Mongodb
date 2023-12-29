@@ -15,7 +15,7 @@ const Stack = createNativeStackNavigator();
   const fetchData = async () => {
     // phải dùng IPv4 chứ dùng localhost là lỗi liền
     try {
-      const response = await axios.post("http://192.168.1.12:8085/fetchNote/", 
+      const response = await axios.post("http://192.168.1.14:8085/fetchNote/", 
         {
           userId: "653e290a6e6f2bfba80dca51",
         },

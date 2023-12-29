@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AddNote from "./AddNote";
 import axios from "axios";
 
@@ -45,7 +45,7 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
     const onAddNote = async (newNote) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.post("http://192.168.1.12:8085/createNote/", 
+            await axios.post("http://192.168.1.14:8085/createNote/", 
                 newNote,
                 {
                     headers: {
@@ -75,9 +75,17 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
                             setSort(false)
                         }}
                     >
-                        <Text style={styles.textSort}>
-                            Ascending 
-                        </Text>
+                        {
+                            sort == false ? (
+                                <Text style={styles.textSort_active}>
+                                    Ascending 
+                                </Text>
+                            ) : (
+                                <Text style={styles.textSort}>
+                                    Ascending 
+                                </Text>
+                            )
+                        }
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -85,9 +93,17 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
                             setSort(true)
                         }}
                     >
-                        <Text style={styles.textSort}>
-                            Descending
-                        </Text>
+                    {
+                        sort == true ? (
+                            <Text style={styles.textSort_active}>
+                                Descending 
+                            </Text>
+                        ) : (
+                            <Text style={styles.textSort}>
+                                Descending 
+                            </Text>
+                        )
+                    }
                     </TouchableOpacity>
                 </View>
                 </View>
@@ -145,11 +161,21 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       padding: 10,
       marginRight: 5,
-      justifyContent: "space-between"
+      justifyContent: "space-between",
     },
     textSort: {
         fontSize: 18,
         fontWeight: "bold",
+        textAlign: "center"
+    },
+    textSort_active: {
+        fontSize: 18,
+        fontWeight: "bold",
+        display: "flex",
+        backgroundColor: "#b3cccc",
+        borderRadius: 5,
+        paddingVertical: 1,
+        textAlign: "center"
     },
     TextInput: {
       borderWidth: 0.5,
