@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { FlatList, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import AddNote from "./AddNote";
 import axios from "axios";
+import AddNote from "./AddNote";
+import NoteItem from "./NoteItem";
 
 const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
 
@@ -45,7 +46,7 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
     const onAddNote = async (newNote) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.post("http://192.168.1.14:8085/createNote/", 
+            await axios.post("http://192.168.10.247:8085/createNote/", 
                 newNote,
                 {
                     headers: {
@@ -122,13 +123,7 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
                 <View style={styles.note_container}>
                 {
                     sortedData.map((i, index) => (
-                        <TouchableOpacity style={styles.note_item} key={index}
-                            onPress={() => {}}
-                        >
-                            <Text style={styles.note_date}>{i.createdAt.slice(0, 10).split('-').reverse().join('-')}</Text>
-                            <Text style={styles.note_title}>{i.title}</Text>
-                            <Text style={styles.note_content}>{i.content}</Text>
-                        </TouchableOpacity>
+                        <NoteItem title={i.title} content={i.content} createdAt={i.createdAt} id={i._id} index={index} fetchData={fetchData} />
                     ))
                 }
                 </View>
@@ -201,22 +196,6 @@ const styles = StyleSheet.create({
         paddingRight: 14,
         marginBottom: 100
     },
-    note_item: {
-        flexBasis: "48%",
-        backgroundColor: "#f7df7c",
-        color: "#000000",
-        borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 10,
-        marginBottom: 10
-    },
-    note_date: {
-        textAlign: "right"
-    },
-    note_title: {
-        fontWeight: "bold",
-        fontSize: 20,
-    }
   });
    
 
