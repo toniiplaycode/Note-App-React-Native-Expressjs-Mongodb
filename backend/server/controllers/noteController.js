@@ -45,11 +45,11 @@ export const createNote = async(req, res) => {
     }
 }
 
-export const editNote = async(req, res) => {
+export const editNote = async (req, res) => {
     const { noteId, title, content } = req.body;
 
     try {
-        if(!noteId || !content) {
+        if(!noteId || !content || !title) {
             res.status(400);
             throw new Error("noteId or content empty !");
             return;

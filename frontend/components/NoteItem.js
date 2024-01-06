@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import EditNote from "./EditNote";
 
-const NoteItem = ( { title, content, createdAt, id, index, fetchData } ) => {
+const NoteItem = ( { title, content, createdAt, id, index, fetchData} ) => {
     const [showHandleNote, setShowHandleNote] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const confirmDelete = (id) =>
         Alert.alert('Notication', 'Are you sure delete this note ?', [
@@ -16,15 +18,15 @@ const NoteItem = ( { title, content, createdAt, id, index, fetchData } ) => {
             text: 'OK', 
             onPress: () => {
                 // console.log(id);
-                deleteNote(id);
+                hanleDeleteNote(id);
             }
         },
     ]);
 
-    const deleteNote = async (id) => {
+    const hanleDeleteNote = async (id) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.put("http://192.168.10.247:8085/deleteNote/", 
+            await axios.put("http://192.168.1.13:8085/deleteNote/", 
                 {
                     "noteId": id.toString()
                 },
@@ -36,6 +38,25 @@ const NoteItem = ( { title, content, createdAt, id, index, fetchData } ) => {
             );
         } catch (error) {
             console.error("Error delete data:", error);
+        }
+
+        fetchData();
+    }
+
+    const handleEditNote = async (valueNote) => {
+        // phải dùng IPv4 chứ dùng localhost là lỗi liền
+        try {
+            await axios.put("http://192.168.1.13:8085/editNote/",             
+                valueNote
+                ,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                },
+            );
+        } catch (error) {
+            console.error("Error edit data:", error);
         }
 
         fetchData();
@@ -60,7 +81,11 @@ const NoteItem = ( { title, content, createdAt, id, index, fetchData } ) => {
                     source={require('../assets/bin.png')}
                     />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.handleNote_item}>
+                <TouchableOpacity style={styles.handleNote_item}
+                    onPress={() => {
+                        setModalVisible(true);
+                    }}
+                >
                     <Image
                     style={styles.icon_handle}
                     source={require('../assets/edit.png')}
@@ -69,6 +94,8 @@ const NoteItem = ( { title, content, createdAt, id, index, fetchData } ) => {
               </View>
             )
             }
+
+            <EditNote handleEditNote={handleEditNote} modalVisible={modalVisible} setModalVisible={setModalVisible} title={title} content={content} id={id} />
         </TouchableOpacity>
     )
 }

@@ -43,10 +43,10 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
         setSortedData(sortedAndFilteredData);
     }, [data, search, sort]);
 
-    const onAddNote = async (newNote) => {
+    const handleAddNote = async (newNote) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.post("http://192.168.10.247:8085/createNote/", 
+            await axios.post("http://192.168.1.13:8085/createNote/", 
                 newNote,
                 {
                     headers: {
@@ -123,13 +123,13 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
                 <View style={styles.note_container}>
                 {
                     sortedData.map((i, index) => (
-                        <NoteItem title={i.title} content={i.content} createdAt={i.createdAt} id={i._id} index={index} fetchData={fetchData} />
+                        <NoteItem title={i.title} content={i.content} createdAt={i.createdAt} id={i._id} index={index} fetchData={fetchData}/>
                     ))
                 }
                 </View>
             </ScrollView> 
 
-            <AddNote onAddNote={onAddNote} />
+            <AddNote handleAddNote={handleAddNote} />
         </View>
     );
 }

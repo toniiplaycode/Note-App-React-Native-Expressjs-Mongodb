@@ -1,27 +1,16 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, TextInput, Button, StyleSheet } from "react-native";
 
-const AddNote = ({handleAddNote}) => {
-  const [newNote, setNewNote] = useState({ userId: "653e290a6e6f2bfba80dca51", title: "", content: "" }); 
-  const [modalVisible, setModalVisible] = useState(false);
+const EditNote = ({ handleEditNote, modalVisible, setModalVisible, title, content, id }) => {
+  const [valueNote, setValueNote] = useState({ noteId: id, title: title, content: content }); 
 
-  const callHandleAddNote = () => {
-    handleAddNote(newNote);
-    setNewNote({ title: "", content: "" });
+  const callHandleEditNote = () => {
+    handleEditNote(valueNote);
     setModalVisible(false);
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.addButtonContainer}>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
-      </View>
-
       <Modal
         visible={modalVisible}
         transparent
@@ -39,17 +28,17 @@ const AddNote = ({handleAddNote}) => {
                 <TextInput
                     style={styles.input}
                     placeholder="Title"
-                    value={newNote.title}
-                    onChangeText={(text) => setNewNote({ ...newNote, title: text })}
+                    value={valueNote.title}
+                    onChangeText={(text) => setValueNote({ ...valueNote, title: text })}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Content"
                     multiline
-                    value={newNote.content}
-                    onChangeText={(text) => setNewNote({ ...newNote, content: text })}
+                    value={valueNote.content}
+                    onChangeText={(text) => setValueNote({ ...valueNote, content: text })}
                 />
-                <Button title="Add Note" onPress={callHandleAddNote} />
+                <Button title="Edit Note" onPress={callHandleEditNote} />
             </View>
         </View>
       </Modal>
@@ -62,18 +51,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%"
-  },
-  addButtonContainer: {
-    left: "80%",
-    top: "70%"
-  },
-  addButton: {
-    backgroundColor: "#00ccff",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
   },
   buttonText: {
     color: "white",
@@ -118,4 +95,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddNote;
+export default EditNote;
