@@ -23,8 +23,9 @@ export const createNote = async(req, res) => {
     const { title, content, userId } = req.body;
 
     if(content.length === 0 || !userId) {
-        res.status(400);
-        throw new Error("content or user empty !");
+        res.status(204).json({
+            "MesErorr": "content or user empty !"
+        });
         return;
     }
 

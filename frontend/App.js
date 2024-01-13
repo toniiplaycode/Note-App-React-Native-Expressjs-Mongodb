@@ -1,9 +1,11 @@
 import { Button, DrawerLayoutAndroidBase, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, PreventRemoveProvider } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from "./components/Home";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import LogIn from "./components/LogIn";
+import SignUp from "./components/SignUp";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +17,7 @@ const Stack = createNativeStackNavigator();
   const fetchData = async () => {
     // phải dùng IPv4 chứ dùng localhost là lỗi liền
     try {
-      const response = await axios.post("http://192.168.1.13:8085/fetchNote/", 
+      const response = await axios.post("http://192.168.1.11:8085/fetchNote/", 
         {
           userId: "653e290a6e6f2bfba80dca51",
         },
@@ -38,8 +40,23 @@ const Stack = createNativeStackNavigator();
   
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="LogIn"> 
+        <Stack.Screen 
+          name="LogIn"
+          component={(props) => (
+            <LogIn {...props} />
+          )}
+          options={{ headerShown: false }}
+        />
 
+        <Stack.Screen 
+          name="SignUp"
+          component={(props) => (
+            <SignUp {...props} />
+          )}
+          options={{ headerShown: false }}
+        />
+        
         <Stack.Screen
           name="Home"
           component={(props) => (

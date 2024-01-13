@@ -26,7 +26,7 @@ const NoteItem = ( { title, content, createdAt, id, index, fetchData} ) => {
     const hanleDeleteNote = async (id) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.put("http://192.168.1.13:8085/deleteNote/", 
+            await axios.put("http://192.168.1.11:8085/deleteNote/", 
                 {
                     "noteId": id.toString()
                 },
@@ -46,7 +46,7 @@ const NoteItem = ( { title, content, createdAt, id, index, fetchData} ) => {
     const handleEditNote = async (valueNote) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.put("http://192.168.1.13:8085/editNote/",             
+            await axios.put("http://192.168.1.11:8085/editNote/",             
                 valueNote
                 ,
                 {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import axios from "axios";
 import AddNote from "./AddNote";
 import NoteItem from "./NoteItem";
@@ -46,7 +46,7 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
     const handleAddNote = async (newNote) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.post("http://192.168.1.13:8085/createNote/", 
+            await axios.post("http://192.168.1.11:8085/createNote/", 
                 newNote,
                 {
                     headers: {
