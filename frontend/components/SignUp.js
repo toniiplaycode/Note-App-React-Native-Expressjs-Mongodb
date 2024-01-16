@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 
 const SignUp = ({navigation}) => { // có navigation cho dù không truyền props
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>NOTE APP</Text>
@@ -11,15 +15,21 @@ const SignUp = ({navigation}) => { // có navigation cho dù không truyền pro
       <View style={styles.TextInput_container}>
             <TextInput
                 style={styles.TextInput}
+                placeholder="Name"
+                value={name}
+                onChangeText={(value) => setName(value)}
+            />
+            <TextInput
+                style={styles.TextInput}
                 placeholder="Email"
-                // value={search}
-                // onChangeText={(value) => setSearch(value)}
+                value={email}
+                onChangeText={(value) => setEmail(value)}
             />
             <TextInput
                 style={styles.TextInput}
                 placeholder="Password"
-                // value={search}
-                // onChangeText={(value) => setSearch(value)}
+                value={password}
+                onChangeText={(value) => setPassword(value)}
             />
             <TouchableOpacity
                 onPress={() => {

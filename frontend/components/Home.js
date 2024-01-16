@@ -5,7 +5,6 @@ import AddNote from "./AddNote";
 import NoteItem from "./NoteItem";
 
 const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
-
     const [search, setSearch] = useState();
     const [sortedData, setSortedData] = useState([]);
 
@@ -46,7 +45,7 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
     const handleAddNote = async (newNote) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.post("http://192.168.1.11:8085/createNote/", 
+            await axios.post("http://192.168.1.13:8085/createNote/", 
                 newNote,
                 {
                     headers: {

@@ -1,7 +1,33 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 
-const LogIn = ({navigation}) => { // có navigation cho dù không truyền props
+const LogIn = ({navigation, setUserId}) => { // có navigation cho dù không truyền props
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
+  const handleLogin = async (obj) => {
+    // console.log(obj);
+    try {
+      const response = await axios.post("http://192.168.1.13:8085/signin/", 
+        obj,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      setUserId(response.data._id);
+      fetchData(); 
+      
+    } catch (error) {
+      console.error("Error login: ", error);
+    }
+
+    navigation.navigate("Home");
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>NOTE APP</Text>
@@ -12,18 +38,18 @@ const LogIn = ({navigation}) => { // có navigation cho dù không truyền prop
             <TextInput
                 style={styles.TextInput}
                 placeholder="Email"
-                // value={search}
-                // onChangeText={(value) => setSearch(value)}
+                value={email}
+                onChangeText={(value) => setEmail(value)}
             />
             <TextInput
                 style={styles.TextInput}
                 placeholder="Password"
-                // value={search}
-                // onChangeText={(value) => setSearch(value)}
+                value={password}
+                onChangeText={(value) => setPassword(value)}
             />
             <TouchableOpacity
                 onPress={() => {
-
+                  handleLogin({email, password});
                 }}
                 style={styles.button}
             >

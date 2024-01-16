@@ -1,5 +1,5 @@
-import { Button, DrawerLayoutAndroidBase, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { NavigationContainer, PreventRemoveProvider } from '@react-navigation/native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from "./components/Home";
 import { useEffect, useState } from "react";
@@ -13,13 +13,14 @@ const Stack = createNativeStackNavigator();
   const [showSort, setShowSort] = useState(false)
   const [sort, setSort] = useState(true); // true: DES, false: ASC
   const [data, setData] = useState([]);
+  const [userId, setUserId] = useState();
 
   const fetchData = async () => {
     // phải dùng IPv4 chứ dùng localhost là lỗi liền
     try {
-      const response = await axios.post("http://192.168.1.11:8085/fetchNote/", 
+      const response = await axios.post("http://192.168.1.13:8085/fetchNote/", 
         {
-          userId: "653e290a6e6f2bfba80dca51",
+          userId
         },
         {
           headers: {
@@ -34,17 +35,22 @@ const Stack = createNativeStackNavigator();
     }
   };
 
-  useEffect(() => {
-    fetchData(); 
-  }, []); 
+  // useEffect(() => {
+  //   fetchData(); 
+  // }, []); 
+
+  
+  const handleSignup = () => {
+
+  }
   
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LogIn"> 
+      <Stack.Navigator initialRouteName="Login"> 
         <Stack.Screen 
           name="LogIn"
           component={(props) => (
-            <LogIn {...props} />
+            <LogIn {...props} setUserId={setUserId} fetchData={fetchData} />
           )}
           options={{ headerShown: false }}
         />
