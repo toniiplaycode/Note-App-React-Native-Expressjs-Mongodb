@@ -10,36 +10,38 @@ import SignUp from "./components/SignUp";
 const Stack = createNativeStackNavigator();
 
  const App = () => {
-  const [showSort, setShowSort] = useState(false)
+  const [showSort, setShowSort] = useState(false);
+  const [showSignOut, setShowSignOut] = useState(false);
   const [sort, setSort] = useState(true); // true: DES, false: ASC
   const [data, setData] = useState([]);
   const [userId, setUserId] = useState();
 
   const fetchData = async () => {
-    // phải dùng IPv4 chứ dùng localhost là lỗi liền
-    try {
-      const response = await axios.post("http://192.168.1.13:8085/fetchNote/", 
-        {
-          userId
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+    // phải dùng IPv4 chứ dùng localhost là lỗi liền    
+    if(userId) {
+      try {
+        const response = await axios.post("http://192.168.1.14:8085/fetchNote/", 
+          {
+            "userId": userId
           },
-        },
-      );
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
 
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
   };
 
-  // useEffect(() => {
-  //   fetchData(); 
-  // }, []); 
+  useEffect(() => {
+    fetchData(); 
+  }, [userId, userId]); 
 
-  
   const handleSignup = () => {
 
   }
@@ -66,17 +68,21 @@ const Stack = createNativeStackNavigator();
         <Stack.Screen
           name="Home"
           component={(props) => (
-            <Home {...props} showSort={showSort} setShowSort={setShowSort} sort={sort} setSort={setSort} data={data} fetchData={fetchData}/>
+            <Home {...props} showSort={showSort} setShowSort={setShowSort} showSignOut={showSignOut} setShowSignOut={setShowSignOut} sort={sort} setSort={setSort} data={data} fetchData={fetchData} userId={userId}/>
           )}
           options={() => ({
             headerTitle: "NOTE APP",
             headerTitleAlign: 'center',
             headerLeft: () => (
               <View>
-                <Image
-                  style={styles.user}
-                  source={require('./assets/user.png')}
-                />
+                <TouchableOpacity
+                  onPress={() => {setShowSignOut(true)}}
+                >
+                  <Image
+                    style={styles.user}
+                    source={require('./assets/user.png')}
+                  />
+                </TouchableOpacity>
               </View>
             ),
             headerRight: () => (

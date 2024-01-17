@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, TextInput, Button, StyleSheet } from "react-native";
 
-const AddNote = ({handleAddNote}) => {
-  const [newNote, setNewNote] = useState({ userId: "653e290a6e6f2bfba80dca51", title: "", content: "" }); 
+const AddNote = ({handleAddNote, userId}) => {
+  const [newNote, setNewNote] = useState({ userId, title: "", content: "" }); 
   const [modalVisible, setModalVisible] = useState(false);
 
   const callHandleAddNote = () => {

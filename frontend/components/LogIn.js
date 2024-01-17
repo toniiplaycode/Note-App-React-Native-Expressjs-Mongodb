@@ -1,15 +1,16 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LogIn = ({navigation, setUserId}) => { // có navigation cho dù không truyền props
+const LogIn = ({navigation, setUserId, fetchData}) => { // có navigation cho dù không truyền props
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
   const handleLogin = async (obj) => {
     // console.log(obj);
     try {
-      const response = await axios.post("http://192.168.1.13:8085/signin/", 
+      const response = await axios.post("http://192.168.1.14:8085/signin/", 
         obj,
         {
           headers: {
@@ -20,13 +21,30 @@ const LogIn = ({navigation, setUserId}) => { // có navigation cho dù không tr
 
       setUserId(response.data._id);
       fetchData(); 
-      
+
+      await AsyncStorage.setItem('userId', response.data._id);
     } catch (error) {
       console.error("Error login: ", error);
     }
 
     navigation.navigate("Home");
   }
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      try {
+        const getUserId = await AsyncStorage.getItem('userId');
+        if (getUserId) {
+          setUserId(getUserId);
+          navigation.navigate('Home');
+        }
+      } catch (error) {
+        console.error('Error checking login status: ', error);
+      }
+    };
+
+    checkLoggedIn();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -45,6 +63,7 @@ const LogIn = ({navigation, setUserId}) => { // có navigation cho dù không tr
                 style={styles.TextInput}
                 placeholder="Password"
                 value={password}
+                secureTextEntry={true}
                 onChangeText={(value) => setPassword(value)}
             />
             <TouchableOpacity

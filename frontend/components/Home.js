@@ -3,10 +3,12 @@ import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View 
 import axios from "axios";
 import AddNote from "./AddNote";
 import NoteItem from "./NoteItem";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
+const Home = ({navigation, showSort, setShowSort, showSignOut, setShowSignOut, sort, setSort, data, fetchData, userId}) => {  // có navigation cho dù không truyền props
     const [search, setSearch] = useState();
-    const [sortedData, setSortedData] = useState([]);
+    const [sortedData, setSortedData] = useState([]); 
+
 
     useEffect(() => {
         const sorted = data.slice().sort((a, b) => {
@@ -45,7 +47,7 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
     const handleAddNote = async (newNote) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.post("http://192.168.1.13:8085/createNote/", 
+            await axios.post("http://192.168.1.14:8085/createNote/", 
                 newNote,
                 {
                     headers: {
@@ -63,6 +65,28 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
     return (
         <View style={{position: "relative"}}>
             <Modal
+                visible={showSignOut}
+                transparent
+                onRequestClose={()=>setShowSignOut(false)} // trên android có nút quay lại để thoát
+            >
+                <View style={styles.modal_container_signout}>
+                <View style={styles.modal_box_signout}>
+                    <TouchableOpacity
+                        onPress={async () => {
+                            setShowSignOut(!showSignOut);
+                            await AsyncStorage.removeItem("userId");
+                            navigation.navigate("LogIn");
+                        }}
+                    >
+                        <Text style={styles.textModal}>
+                            Sign Out
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                </View>
+            </Modal>
+
+            <Modal
                 visible={showSort}
                 transparent
                 onRequestClose={()=>setShowSort(false)} // trên android có nút quay lại để thoát
@@ -77,11 +101,11 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
                     >
                         {
                             sort == false ? (
-                                <Text style={styles.textSort_active}>
+                                <Text style={styles.textModal_active}>
                                     Ascending 
                                 </Text>
                             ) : (
-                                <Text style={styles.textSort}>
+                                <Text style={styles.textModal}>
                                     Ascending 
                                 </Text>
                             )
@@ -95,11 +119,11 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
                     >
                     {
                         sort == true ? (
-                            <Text style={styles.textSort_active}>
+                            <Text style={styles.textModal_active}>
                                 Descending 
                             </Text>
                         ) : (
-                            <Text style={styles.textSort}>
+                            <Text style={styles.textModal}>
                                 Descending 
                             </Text>
                         )
@@ -128,7 +152,7 @@ const Home = ({showSort, setShowSort, sort, setSort, data, fetchData}) => {
                 </View>
             </ScrollView> 
 
-            <AddNote handleAddNote={handleAddNote} />
+            <AddNote handleAddNote={handleAddNote} userId={userId}/>
         </View>
     );
 }
@@ -140,6 +164,22 @@ const styles = StyleSheet.create({
       padding: 10,
       borderRadius: 5,
       marginTop: 5
+    },
+    modal_container_signout: {
+      flex: 1,
+      justifyContent: "flex-start",
+      alignItems: "flex-start",
+      backgroundColor: "#00000099"
+    },
+    modal_box_signout: {
+      width: 150,
+      height: 50,
+      backgroundColor: "white",
+      top: 55,
+      borderRadius: 10,
+      padding: 10,
+      marginRight: 5,
+      justifyContent: "space-between",
     },
     modal_container: {
       flex: 1,
@@ -157,12 +197,12 @@ const styles = StyleSheet.create({
       marginRight: 5,
       justifyContent: "space-between",
     },
-    textSort: {
+    textModal: {
         fontSize: 18,
         fontWeight: "bold",
         textAlign: "center"
     },
-    textSort_active: {
+    textModal_active: {
         fontSize: 18,
         fontWeight: "bold",
         display: "flex",

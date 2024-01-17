@@ -23,6 +23,7 @@ const SignUp = ({navigation}) => { // có navigation cho dù không truyền pro
                 style={styles.TextInput}
                 placeholder="Email"
                 value={email}
+                secureTextEntry={true}
                 onChangeText={(value) => setEmail(value)}
             />
             <TextInput
