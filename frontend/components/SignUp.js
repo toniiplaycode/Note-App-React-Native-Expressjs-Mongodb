@@ -9,7 +9,7 @@ const SignUp = ({navigation}) => { // có navigation cho dù không truyền pro
   
   const handleSignUp = async (obj) => {
     try {
-      const response = await axios.post("http://192.168.1.16:8085/signup/", 
+      await axios.post("http://192.168.1.16:8085/signup/", 
         obj,
         {
           headers: {
