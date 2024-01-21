@@ -10,7 +10,7 @@ const LogIn = ({navigation, setUserId, fetchData}) => { // cÃ³ navigation cho dÃ
   const handleLogin = async (obj) => {
     // console.log(obj);
     try {
-      const response = await axios.post("http://192.168.1.14:8085/signin/", 
+      const response = await axios.post("http://192.168.1.16:8085/signin/", 
         obj,
         {
           headers: {

@@ -47,7 +47,7 @@ const Home = ({navigation, showSort, setShowSort, showSignOut, setShowSignOut, s
     const handleAddNote = async (newNote) => {
         // phải dùng IPv4 chứ dùng localhost là lỗi liền
         try {
-            await axios.post("http://192.168.1.14:8085/createNote/", 
+            await axios.post("http://192.168.1.16:8085/createNote/", 
                 newNote,
                 {
                     headers: {

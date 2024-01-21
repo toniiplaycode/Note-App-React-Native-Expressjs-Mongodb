@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -5,7 +6,25 @@ const SignUp = ({navigation}) => { // có navigation cho dù không truyền pro
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  
+  const handleSignUp = async (obj) => {
+    try {
+      const response = await axios.post("http://192.168.1.16:8085/signup/", 
+        obj,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
+      navigation.navigate('LogIn');
+
+    } catch (error) {
+      console.error("Error signup: ", error);
+    }
+  }
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>NOTE APP</Text>
@@ -23,18 +42,18 @@ const SignUp = ({navigation}) => { // có navigation cho dù không truyền pro
                 style={styles.TextInput}
                 placeholder="Email"
                 value={email}
-                secureTextEntry={true}
                 onChangeText={(value) => setEmail(value)}
             />
             <TextInput
                 style={styles.TextInput}
                 placeholder="Password"
                 value={password}
+                secureTextEntry={true}
                 onChangeText={(value) => setPassword(value)}
             />
             <TouchableOpacity
                 onPress={() => {
-
+                  handleSignUp({name, email, password})
                 }}
                 style={styles.button}
             >
